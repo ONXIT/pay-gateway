@@ -2,6 +2,19 @@
 
 ---
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Basic Usage](#basic-usage)
+    - [Using Helpers](#using-helpers)
+    - [Using Laravel Facades](#using-laravel-facades)
+- [Migration](#migration)
+- [Model](#model)
+- [TODO: Suggestions to Extend](#suggestions-to-extend)
+
+---
+
 ## Getting Started
 
 This package is designed for fast and straightforward payment integration, providing basic components such as migrations, models, enums, and providers out of the box. Currently, it supports only the `Imoje (ING)` payment gateway with a pre-configured webhook.
@@ -98,7 +111,7 @@ The package also includes a `Transaction` model that you can use, extend, or rep
 
 ---
 
-### TODO: Suggestions to Extend:
+### Suggestions to Extend:
 
 1. **Webhook Configuration**: Add instructions on configuring and testing webhooks.
 2. **Error Handling**: Consider providing best practices for handling transaction failures or webhook verification issues.
