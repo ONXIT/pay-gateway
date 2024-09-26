@@ -1,5 +1,5 @@
 {
-    "name": "qionar/pay-gateway",
+    "name": "ONXIT/pay-gateway",
     "description": "The internal package for processing fast payments.",
     "type": "library",
     "license": "MIT",
