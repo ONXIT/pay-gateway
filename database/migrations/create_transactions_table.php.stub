@@ -1,0 +1,25 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('transactions', function (Blueprint $table) {
+            $table->id();
+
+            $table->uuid('uuid');
+            $table->string('provider_id')->nullable();
+            $table->enum('provider', \Qionar\PayGateway\Enums\PaymentProvider::values());
+            $table->enum('status', \Qionar\PayGateway\Enums\TransactionStatus::values());
+            $table->bigInteger('amount')->unsigned();
+            $table->json('provider_data')->nullable();
+            $table->json('custom_properties')->nullable();
+
+            $table->timestamps();
+        });
+    }
+};

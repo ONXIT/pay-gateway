@@ -1,0 +1,32 @@
+<?php
+
+namespace Qionar\PayGateway;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
+use Qionar\PayGateway\Controllers\Contracts\HandleWebhookCallbacks;
+
+class PayGatewayServiceProvider extends ServiceProvider
+{
+    public function register()
+    {
+        $drivers = config('pay-gateway.drivers');
+
+        foreach ($drivers as $driver) {
+            $webhookConfigs = $driver['webhook'];
+
+            if(!$webhookConfigs['enabled']) {
+                continue;
+            }
+
+            if(!($webhookConfigs['controller'] instanceof HandleWebhookCallbacks)) {
+                throw new \Exception("Class {$driver['controller']} does not implement HandleWebhookCallbacks");
+            }
+
+            Route::{$webhookConfigs['method']}(
+                $webhookConfigs['uri'],
+                [$webhookConfigs['controller'], 'handle']
+            );
+        }
+    }
+}

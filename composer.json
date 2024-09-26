@@ -1,0 +1,36 @@
+{
+    "name": "qionar/pay-gateway",
+    "description": "The internal package for processing fast payments.",
+    "type": "library",
+    "license": "MIT",
+    "version": "dev-main",
+    "autoload": {
+        "psr-4": {
+            "Qionar\\PayGateway\\": "src/"
+        },
+        "files": [
+            "./src/helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Sviatoslav Zhovtiak",
+            "email": "jovtyaks@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/database": "^10.0|^11.0",
+        "illuminate/support": "^10.0|^11.0",
+        "illuminate/http": "^10.0|^11.0",
+        "illuminate/routing": "^10.0|^11.0",
+        "spatie/laravel-package-tools": "^1.16"
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Qionar\\PayGateway\\PayGatewayServiceProvider"
+            ]
+        }
+    }
+}
