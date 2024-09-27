@@ -92,7 +92,7 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
     {
         return Http::asJson()
             ->withToken($this->authToken, 'Bearer')
-            ->baseUrl($this->baseUrl);
+            ->baseUrl($this->baseUrl . '/' . $this->merchantId);
     }
 
 }

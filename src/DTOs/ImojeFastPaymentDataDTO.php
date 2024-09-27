@@ -93,7 +93,7 @@ class ImojeFastPaymentDataDTO extends PaymentDataDTO
         return \Arr::whereNotNull([
             'amount' => $this->getAmount(),
             'currency' => $this->getCurrency(),
-            'orderID' => $this->getInternalOrderId(),
+            'orderId' => $this->getInternalOrderId(),
             'customer' => \Arr::whereNotNull([
                 'firstName' => $this->getFirstName(),
                 'lastName' => $this->getLastName(),
