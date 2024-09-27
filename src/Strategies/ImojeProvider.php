@@ -28,7 +28,7 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
     public function __construct()
     {
         $this->baseUrl = config('pay-gateway.drivers.imoje.base_url');
-        $this->serviceId = config('pay-gateway.drivers.imoje.client_id');
+        $this->serviceId = config('pay-gateway.drivers.imoje.service_id');
         $this->merchantId = config('pay-gateway.drivers.imoje.merchant_id');
         $this->merchantKey = config('pay-gateway.drivers.imoje.merchant_key');
         $this->authToken = config('pay-gateway.drivers.imoje.auth_token');
