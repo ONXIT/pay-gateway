@@ -60,7 +60,7 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
         }
 
         if($this->enforceWebhook) {
-            $payload['notificationUrl'] = $this->webhookUrl;
+            $payload['notificationUrl'] = url($this->webhookUrl);
         }
 
         $response = $this
