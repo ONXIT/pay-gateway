@@ -2,6 +2,7 @@
 
 namespace Qionar\PayGateway;
 
+use Qionar\PayGateway\DTOs\FastPaymentResultDTO;
 use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
 use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
 use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
@@ -14,7 +15,7 @@ class Facade implements PaymentProvider, HasFastPayments
     )
     {}
 
-    public function processFastPayment(RequiredPaymentData $data): array
+    public function processFastPayment(RequiredPaymentData $data): FastPaymentResultDTO
     {
         if(!($this->paymentProvider instanceof HasFastPayments)) {
             throw new \Exception('Payment provider is not instance of HasFastPayments');
