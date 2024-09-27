@@ -7,6 +7,7 @@ use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
 use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
 use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
 use Qionar\PayGateway\DTOs\ImojeFastPaymentDataDTO;
+use Qionar\PayGateway\DTOs\FastPaymentResultDTO;
 
 class ImojeProvider implements PaymentProvider, HasFastPayments
 {
@@ -40,7 +41,7 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
     }
 
 
-    public function processFastPayment(RequiredPaymentData $data): array
+    public function processFastPayment(RequiredPaymentData $data): FastPaymentResultDTO
     {
         if ($data instanceof ImojeFastPaymentDataDTO) {
             $payload = $data->toPayload([
@@ -71,7 +72,11 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
                 ...$payload,
             ]);
 
-        return $response->json();
+        return new FastPaymentResultDTO(
+            url: $response->json('payment.url'),
+            providerData: $response->json(''),
+            internalOrderId: $response->json('payment.orderId'),
+        );
     }
 
     public function setLanguage(string $language): ImojeProvider
