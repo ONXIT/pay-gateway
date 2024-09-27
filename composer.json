@@ -1,5 +1,5 @@
 {
-    "name": "ONXIT/pay-gateway",
+    "name": "onxit/pay-gateway",
     "description": "The internal package for processing fast payments.",
     "type": "library",
     "license": "MIT",
