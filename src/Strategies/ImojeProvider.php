@@ -27,16 +27,16 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
 
     public function __construct()
     {
-        $this->baseUrl = config('pay-gateway.imoje.baseUrl');
-        $this->serviceId = config('pay-gateway.imoje.client_id');
-        $this->merchantId = config('pay-gateway.imoje.merchant_id');
-        $this->merchantKey = config('pay-gateway.imoje.merchant_key');
-        $this->authToken = config('pay-gateway.imoje.auth_token');
-        $this->defaultLanguage = config('pay-gateway.imoje.default_language');
-        $this->defaultCurrency = config('pay-gateway.imoje.default_currency');
+        $this->baseUrl = config('pay-gateway.drivers.imoje.base_url');
+        $this->serviceId = config('pay-gateway.drivers.imoje.client_id');
+        $this->merchantId = config('pay-gateway.drivers.imoje.merchant_id');
+        $this->merchantKey = config('pay-gateway.drivers.imoje.merchant_key');
+        $this->authToken = config('pay-gateway.drivers.imoje.auth_token');
+        $this->defaultLanguage = config('pay-gateway.drivers.imoje.default_language');
+        $this->defaultCurrency = config('pay-gateway.drivers.imoje.default_currency');
 
-        $this->webhookUrl = config('pay-gateway.imoje.webhook.uri');
-        $this->enforceWebhook = config('pay-gateway.imoje.webhook.enabled');
+        $this->webhookUrl = config('pay-gateway.drivers.imoje.webhook.uri');
+        $this->enforceWebhook = config('pay-gateway.drivers.imoje.webhook.enabled');
     }
 
 
