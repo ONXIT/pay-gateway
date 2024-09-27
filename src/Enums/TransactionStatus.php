@@ -2,7 +2,7 @@
 
 namespace Qionar\PayGateway\Enums;
 
-use Qionar\Pay\Gateway\Enums\Traits\ToArray;
+use Qionar\PayGateway\Enums\Traits\ToArray;
 
 enum TransactionStatus: string
 {

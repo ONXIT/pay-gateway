@@ -1,6 +1,6 @@
 <?php
 
-namespace Qionar\Pay\Gateway\Enums\Traits;
+namespace Qionar\PayGateway\Enums\Traits;
 
 trait ToArray
 {
