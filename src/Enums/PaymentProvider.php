@@ -9,5 +9,5 @@ enum PaymentProvider: string
 
     use ToArray;
 
-    case IMOJE = 'IMOJE';
+    case IMOJE = 'imoje';
 }
