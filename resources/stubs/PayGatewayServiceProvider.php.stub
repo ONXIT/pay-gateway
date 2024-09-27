@@ -1,6 +1,6 @@
 <?php
 
-namespace Qionar\PayGateway;
+namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -19,13 +19,15 @@ class PayGatewayServiceProvider extends ServiceProvider
                 continue;
             }
 
-            if(!($webhookConfigs['controller'] instanceof HandleWebhookCallbacks)) {
-                throw new \Exception("Class {$driver['controller']} does not implement HandleWebhookCallbacks");
+            $controllerClass = $webhookConfigs['controller'];
+
+            if(!in_array(HandleWebhookCallbacks::class, class_implements($controllerClass))) {
+                throw new \Exception("Class {$controllerClass} does not implement HandleWebhookCallbacks");
             }
 
             Route::{$webhookConfigs['method']}(
                 $webhookConfigs['uri'],
-                [$webhookConfigs['controller'], 'handle']
+                [$controllerClass, 'handle']
             );
         }
     }
