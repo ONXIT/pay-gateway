@@ -2,7 +2,7 @@
 
 namespace Qionar\PayGateway\DTOs;
 
-use Qionar\PayGateway\Contracts\RequiredPaymentData;
+use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
 
 class ImojeFastPaymentDataDTO extends PaymentDataDTO
 {

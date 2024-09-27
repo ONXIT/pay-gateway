@@ -1,6 +1,6 @@
 <?php
 
-use Qionar\PayGateway\Contracts\PaymentProvider;
+use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
 
 function paymentProcessor(PaymentProvider|string|null $provider = null): PaymentProvider
 {

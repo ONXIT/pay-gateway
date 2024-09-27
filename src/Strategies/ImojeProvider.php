@@ -3,10 +3,9 @@
 namespace Qionar\PayGateway\Strategies;
 
 use Illuminate\Support\Facades\Http;
-use Qionar\PayGateway\Contracts\HasFastPayments;
-use Qionar\PayGateway\Contracts\PaymentProvider;
-use Qionar\PayGateway\Contracts\RequiredPaymentData;
-use Qionar\PayGateway\Contracts\WithPaymentMethods;
+use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
+use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
+use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
 use Qionar\PayGateway\DTOs\ImojeFastPaymentDataDTO;
 
 class ImojeProvider implements PaymentProvider, HasFastPayments

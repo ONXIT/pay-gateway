@@ -1,6 +1,6 @@
 <?php
 
-namespace Qionar\PayGateway\Contracts;
+namespace Qionar\PayGateway\Strategies\Contracts;
 
 interface WithPaymentMethods
 {

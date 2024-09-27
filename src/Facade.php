@@ -2,9 +2,9 @@
 
 namespace Qionar\PayGateway;
 
-use Qionar\PayGateway\Contracts\HasFastPayments;
-use Qionar\PayGateway\Contracts\PaymentProvider;
-use Qionar\PayGateway\Contracts\RequiredPaymentData;
+use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
+use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
+use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
 
 class Facade implements PaymentProvider, HasFastPayments
 {

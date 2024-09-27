@@ -1,6 +1,6 @@
 <?php
 
-namespace Qionar\PayGateway\Contracts;
+namespace Qionar\PayGateway\DTOs\Contracts;
 
 interface RequiredPaymentData
 {
