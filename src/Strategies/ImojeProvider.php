@@ -74,7 +74,7 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
 
         return new FastPaymentResultDTO(
             url: $response->json('payment.url'),
-            providerData: $response->json(''),
+            providerData: $response->json(),
             internalOrderId: $response->json('payment.orderId'),
         );
     }
