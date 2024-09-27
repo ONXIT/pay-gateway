@@ -31,9 +31,4 @@ class Transaction extends Model
     {
         return self::where('uuid', $uuid)->first();
     }
-
-    static public function create(array $attributes)
-    {
-        return self::forceCreate($attributes);
-    }
 }
