@@ -55,7 +55,7 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
                     'locale' => $this->defaultLanguage,
                 ],
                 'amount' => $data->getAmount(),
-                'orderID' => $data->getInternalOrderId(),
+                'orderId' => $data->getInternalOrderId(),
             ];
         }
 

@@ -94,15 +94,15 @@ class ImojeFastPaymentDataDTO extends PaymentDataDTO
             'amount' => $this->getAmount(),
             'currency' => $this->getCurrency(),
             'orderID' => $this->getInternalOrderId(),
-            'customer' => [
+            'customer' => \Arr::whereNotNull([
                 'firstName' => $this->getFirstName(),
                 'lastName' => $this->getLastName(),
                 'email' => $this->getEmail(),
                 'phone' => $this->getPhone(),
                 'locale' => $this->getLanguage() ?? $defaults['language'],
-            ],
+            ]),
             'title' => $this->getTitle(),
-            'visibleMethods' => $this->getVisibleMethods(),
+            'visibleMethod' => $this->getVisibleMethods(),
             'preselectedMethodCode' => $this->getPreselectedMethodCode(),
             'returnUrl' => $this->getReturnUrl(),
             'successReturnUrl' => $this->getSuccessReturnUrl(),
