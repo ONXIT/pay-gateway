@@ -2,7 +2,7 @@
 
 use Qionar\PayGateway\Contracts\PaymentProvider;
 
-function paymentProcessor(PaymentProvider|string $provider)
+function paymentProcessor(PaymentProvider|string|null $provider)
 {
     if ($provider instanceof PaymentProvider) {
         return \Qionar\PayGateway\Facades\PaymentProcessor::withProvider($provider);
