@@ -13,7 +13,7 @@ class PayGatewayServiceProvider extends PackageServiceProvider
         $package
             ->name('pay-gateway')
             ->hasConfigFile()
-            ->hasMigrations()
+            ->hasMigration('create_transactions_table')
             ->publishesServiceProvider('PayGatewayServiceProvider')
             ->hasInstallCommand(function(InstallCommand $command) {
                $command
