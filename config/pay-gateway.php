@@ -6,6 +6,9 @@ return [
 
     'model' => \Qionar\PayGateway\Models\Transaction::class,
 
+    'success_return_uri' => env('PAYMENT_SUCCESS_RETURN_URI'),
+    'failure_return_uri' => env('PAYMENT_FAILURE_RETURN_URI'),
+
     'drivers' => [
 
         'imoje' => [

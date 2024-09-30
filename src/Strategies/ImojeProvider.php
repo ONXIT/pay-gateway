@@ -22,9 +22,12 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
     private string $defaultLanguage;
     private string $defaultCurrency;
 
-    private string $webhookUrl;
+    private string $webhookUri;
 
     private bool $enforceWebhook;
+
+    private string $successReturnUri;
+    private string $failureReturnUri;
 
     public function __construct()
     {
@@ -36,8 +39,10 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
         $this->defaultLanguage = config('pay-gateway.drivers.imoje.default_language');
         $this->defaultCurrency = config('pay-gateway.drivers.imoje.default_currency');
 
-        $this->webhookUrl = config('pay-gateway.drivers.imoje.webhook.uri');
+        $this->webhookUri = config('pay-gateway.drivers.imoje.webhook.uri');
         $this->enforceWebhook = config('pay-gateway.drivers.imoje.webhook.enabled');
+        $this->successReturnUri = config('pay-gateway.success_return_uri');
+        $this->failureReturnUri = config('pay-gateway.failure_return_uri');
     }
 
 
@@ -61,7 +66,15 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
         }
 
         if($this->enforceWebhook) {
-            $payload['notificationUrl'] = $payload['notificationUrl'] ?? url($this->webhookUrl);
+            $payload['notificationUrl'] = $payload['notificationUrl'] ?? url($this->webhookUri);
+        }
+
+        if($this->successReturnUrl) {
+            $payload['successReturnUrl'] = $payload['successReturnUrl'] ?? url($this->successReturnUri);
+        }
+
+        if($this->failureReturnUrl) {
+            $payload['failureReturnUrl'] = $payload['failureReturnUrl'] ?? url($this->failureReturnUri);
         }
 
         $response = $this
