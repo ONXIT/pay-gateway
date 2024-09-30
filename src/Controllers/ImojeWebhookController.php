@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Qionar\PayGateway\Controllers\Contracts\HandleWebhookCallbacks;
 use Qionar\PayGateway\Enums\TransactionStatus;
 use Qionar\PayGateway\Middlewares\EnsureInvokerHasTrustedIp;
+use Qionar\PayGateway\Models\Contracts\HasFindMethod;
 use Qionar\PayGateway\Models\Transaction;
 
 class ImojeWebhookController extends Controller implements HandleWebhookCallbacks
@@ -20,7 +21,7 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
         $this->middleware(
             EnsureInvokerHasTrustedIp::class .
             ':' .
-            json_encode($trustedIps)
+            implode('|', $trustedIps)
         );
     }
 
@@ -31,7 +32,13 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
             'payload' => $request->all()
         ]);
 
-        $transaction = Transaction::findByUuid(
+        $modelClass = config('pay-gateway.model');
+
+        if(!in_array(HasFindMethod::class, class_implements($modelClass))) {
+            throw new \Exception('Model class must implement HasFindMethod to use default webhook handler');
+        }
+
+        $transaction = $modelClass::findByInternalOrderId(
             $request->input('transaction.orderId')
         );
 

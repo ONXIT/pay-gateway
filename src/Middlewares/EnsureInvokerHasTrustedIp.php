@@ -10,7 +10,8 @@ class EnsureInvokerHasTrustedIp
 {
     public function handle(Request $request, Closure $next, string $ips): Response
     {
-        $this->trustedIpRanges = json_decode($ips, true);
+
+        $this->trustedIpRanges = explode('|', $ips);
 
         $clientIp = $request->ip();
 

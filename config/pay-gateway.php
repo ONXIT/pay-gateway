@@ -4,6 +4,8 @@ return [
 
     'default_driver' => env('PAYMENT_DRIVER', 'imoje'),
 
+    'model' => \Qionar\PayGateway\Models\Transaction::class,
+
     'drivers' => [
 
         'imoje' => [

@@ -5,8 +5,9 @@ namespace Qionar\PayGateway\Models;
 use Illuminate\Database\Eloquent\Model;
 use Qionar\PayGateway\Enums\PaymentProvider;
 use Qionar\PayGateway\Enums\TransactionStatus;
+use Qionar\PayGateway\Models\Contracts\HasFindMethod;
 
-class Transaction extends Model
+class Transaction extends Model implements HasFindMethod
 {
     protected $table = 'transactions';
 
@@ -27,8 +28,9 @@ class Transaction extends Model
         'custom_properties' => 'json'
     ];
 
-    static public function findByUuid(string $uuid)
+    static public function findByInternalOrderId(string $uuid): self
     {
         return self::where('uuid', $uuid)->first();
     }
+
 }
