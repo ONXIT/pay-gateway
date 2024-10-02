@@ -26,8 +26,8 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
 
     private bool $enforceWebhook;
 
-    private string $successReturnUri;
-    private string $failureReturnUri;
+    private ?string $successReturnUri;
+    private ?string $failureReturnUri;
 
     public function __construct()
     {

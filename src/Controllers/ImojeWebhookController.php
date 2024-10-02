@@ -9,7 +9,7 @@ use Qionar\PayGateway\Controllers\Contracts\HandleWebhookCallbacks;
 use Qionar\PayGateway\Enums\TransactionStatus;
 use Qionar\PayGateway\Middlewares\EnsureInvokerHasTrustedIp;
 use Qionar\PayGateway\Models\Contracts\HasFindMethod;
-use Qionar\PayGateway\Models\Transaction;
+use Qionar\PayGateway\Models\Contracts\HasStatusMapper;
 
 class ImojeWebhookController extends Controller implements HandleWebhookCallbacks
 {
@@ -34,8 +34,8 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
 
         $modelClass = config('pay-gateway.model');
 
-        if(!in_array(HasFindMethod::class, class_implements($modelClass))) {
-            throw new \Exception('Model class must implement HasFindMethod to use default webhook handler');
+        if(!in_array([HasFindMethod::class, HasStatusMapper::class], class_implements($modelClass))) {
+            throw new \Exception('Model class must implement both of HasFindMethod and HasStatusMapper to be used by default webhook handler');
         }
 
         $transaction = $modelClass::findByInternalOrderId(
@@ -51,7 +51,7 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
         $status = $request->input('transaction.status');
 
         $transaction->update([
-            'status' => $this->mapStatus($status),
+            'status' => $modelClass::mapStatus($status),
             'provider_data' => [
                 ...$transaction->provider_data,
                 'status_callback' => $request->all()
@@ -61,16 +61,6 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
         return response()->json([
             'message' => 'OK'
         ]);
-    }
-
-    protected function mapStatus(string $status): TransactionStatus
-    {
-        return match ($status) {
-            'rejected', 'error' => TransactionStatus::FAILED,
-            'cancelled' => TransactionStatus::CANCELLED,
-            'settled' => TransactionStatus::SUCCESS,
-            default => TransactionStatus::PENDING
-        };
     }
 
 }

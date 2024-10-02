@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Qionar\PayGateway\Enums\PaymentProvider;
 use Qionar\PayGateway\Enums\TransactionStatus;
 use Qionar\PayGateway\Models\Contracts\HasFindMethod;
+use Qionar\PayGateway\Models\Contracts\HasStatusMapper;
 
-class Transaction extends Model implements HasFindMethod
+class Transaction extends Model implements HasFindMethod, HasStatusMapper
 {
     protected $table = 'transactions';
 
@@ -31,6 +32,16 @@ class Transaction extends Model implements HasFindMethod
     static public function findByInternalOrderId(string $uuid): self
     {
         return self::where('uuid', $uuid)->first();
+    }
+
+    public static function mapStatus(mixed $status): TransactionStatus
+    {
+        return match ($status) {
+            'rejected', 'error' => TransactionStatus::FAILED,
+            'cancelled' => TransactionStatus::CANCELLED,
+            'settled' => TransactionStatus::SUCCESS,
+            default => TransactionStatus::PENDING
+        };
     }
 
 }

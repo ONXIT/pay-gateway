@@ -3,7 +3,7 @@
     "description": "The internal package for processing fast payments.",
     "type": "library",
     "license": "MIT",
-    "version": "dev-main",
+    "version": "dev-stable",
     "autoload": {
         "psr-4": {
             "Qionar\\PayGateway\\": "src/"
