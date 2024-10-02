@@ -1,5 +1,7 @@
 <?php
 
+use Qionar\PayGateway\Enums\TransactionStatus;
+
 return [
 
     'default_driver' => env('PAYMENT_DRIVER', 'imoje'),
@@ -33,7 +35,13 @@ return [
                     '54.37.185.64/28',
                     '54.37.185.80/28',
                     '147.135.151.16/28',
-                ]
+                ],
+                'status_mapper' => fn($status) => match ($status) {
+                    'rejected', 'error' => TransactionStatus::FAILED,
+                    'cancelled' => TransactionStatus::CANCELLED,
+                    'settled' => TransactionStatus::SUCCESS,
+                    default => TransactionStatus::PENDING
+                }
             ],
         ]
 

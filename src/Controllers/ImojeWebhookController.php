@@ -51,7 +51,7 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
         $status = $request->input('transaction.status');
 
         $transaction->update([
-            'status' => $modelClass::mapStatus($status),
+            'status' => config('pay-gateway.drivers.imoje.webhook.status_mapper')($status),
             'provider_data' => [
                 ...$transaction->provider_data,
                 'status_callback' => $request->all()
