@@ -3,6 +3,7 @@
 namespace Qionar\PayGateway\Strategies;
 
 use Illuminate\Support\Facades\Http;
+use Qionar\PayGateway\Exceptions\BadProviderResponse;
 use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
 use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
 use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
@@ -84,6 +85,10 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
                 'currency' => $this->defaultCurrency,
                 ...$payload,
             ]);
+
+        if(!$response->successful()) {
+            throw new BadProviderResponse($response);
+        }
 
         return new FastPaymentResultDTO(
             url: $response->json('payment.url'),

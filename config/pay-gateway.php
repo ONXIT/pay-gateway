@@ -14,7 +14,7 @@ return [
         'imoje' => [
             'provider' => \Qionar\PayGateway\Strategies\ImojeProvider::class,
 
-            'base_url' => env('PAYMENT_ING_BASE_URL', 'https://sandbox.api.imoje.pl/v1/merchant/'),
+            'base_url' => env('PAYMENT_ING_BASE_URL', 'https://sandbox.api.imoje.pl/v1/merchant'),
             'service_id' => env('PAYMENT_ING_SERVICE_ID', ''),
             'merchant_id' => env('PAYMENT_ING_MERCHANT_ID', ''),
             'merchant_key' => env('PAYMENT_ING_MERCHANT_KEY', ''),
