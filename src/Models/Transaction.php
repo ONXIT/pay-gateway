@@ -6,9 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Qionar\PayGateway\Enums\PaymentProvider;
 use Qionar\PayGateway\Enums\TransactionStatus;
 use Qionar\PayGateway\Models\Contracts\HasFindMethod;
-use Qionar\PayGateway\Models\Contracts\HasStatusMapper;
 
-class Transaction extends Model implements HasFindMethod, HasStatusMapper
+class Transaction extends Model implements HasFindMethod
 {
     protected $table = 'transactions';
 
