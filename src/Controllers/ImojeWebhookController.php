@@ -34,7 +34,7 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
 
         $modelClass = config('pay-gateway.model');
 
-        if(!in_array([HasFindMethod::class, HasStatusMapper::class], class_implements($modelClass))) {
+        if(!in_array(HasFindMethod::class, class_implements($modelClass))) {
             throw new \Exception('Model class must implement both of HasFindMethod and HasStatusMapper to be used by default webhook handler');
         }
 
