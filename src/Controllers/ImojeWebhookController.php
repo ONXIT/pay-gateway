@@ -13,18 +13,6 @@ use Qionar\PayGateway\Models\Contracts\HasStatusMapper;
 
 class ImojeWebhookController extends Controller implements HandleWebhookCallbacks
 {
-
-    public function __construct()
-    {
-        $trustedIps = config('pay-gateway.drivers.imoje.webhook.trusted_ip_ranges');
-
-        $this->middleware(
-            EnsureInvokerHasTrustedIp::class .
-            ':' .
-            implode('|', $trustedIps)
-        );
-    }
-
     public function handle(Request $request): \Illuminate\Http\JsonResponse
     {
         Log::info('New transaction callback received.', [
@@ -34,7 +22,7 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
 
         $modelClass = config('pay-gateway.model');
 
-        if(!in_array(HasFindMethod::class, class_implements($modelClass))) {
+        if (!in_array(HasFindMethod::class, class_implements($modelClass))) {
             throw new \Exception('Model class must implement both of HasFindMethod and HasStatusMapper to be used by default webhook handler');
         }
 
@@ -42,9 +30,9 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
             $request->input('transaction.orderId')
         );
 
-        if(!$transaction) {
+        if (!$transaction) {
             return response()->json([
-               'message' => 'There is no transaction with specified id'
+                'message' => 'There is no transaction with specified id'
             ], 404);
         }
 
@@ -62,5 +50,4 @@ class ImojeWebhookController extends Controller implements HandleWebhookCallback
             'message' => 'OK'
         ]);
     }
-
 }
