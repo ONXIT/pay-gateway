@@ -9,7 +9,7 @@ class FastPaymentResultDTO
         private readonly string $url,
         private readonly array $providerData,
         private readonly string $internalOrderId,
-        private readonly string $customerPaymentToken
+        private readonly ?string $customerPaymentToken = null
     ) {}
 
     public function getUrl(): string
