@@ -28,8 +28,7 @@ class ImojeFastPaymentDataDTO extends PaymentDataDTO
         // Customer addition model
         protected readonly ?string $phone = null,
         protected readonly ?string $language = null,
-    )
-    {
+    ) {
         parent::__construct($firstName, $lastName, $email, $amount, $internalOrderId);
     }
 

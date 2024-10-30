@@ -9,6 +9,7 @@ class FastPaymentResultDTO
         private readonly string $url,
         private readonly array $providerData,
         private readonly string $internalOrderId,
+        private readonly string $customerPaymentToken
     ) {}
 
     public function getUrl(): string
@@ -26,4 +27,8 @@ class FastPaymentResultDTO
         return $this->internalOrderId;
     }
 
+    public function getCustomerPaymentToken(): string
+    {
+        return $this->customerPaymentToken;
+    }
 }

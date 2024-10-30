@@ -3,14 +3,16 @@
 namespace Qionar\PayGateway\Strategies;
 
 use Illuminate\Support\Facades\Http;
+use InvalidArgumentException;
 use Qionar\PayGateway\Exceptions\BadProviderResponse;
 use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
 use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
 use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
 use Qionar\PayGateway\DTOs\ImojeFastPaymentDataDTO;
 use Qionar\PayGateway\DTOs\FastPaymentResultDTO;
+use Qionar\PayGateway\Strategies\Contracts\HasSubscriptions;
 
-class ImojeProvider implements PaymentProvider, HasFastPayments
+class ImojeProvider implements PaymentProvider, HasFastPayments, HasSubscriptions
 {
 
     public const FAST_PAYMENT_URI = '/payment';
@@ -46,54 +48,44 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
         $this->failureReturnUri = config('pay-gateway.failure_return_uri');
     }
 
-
     public function processFastPayment(RequiredPaymentData $data): FastPaymentResultDTO
     {
-        if ($data instanceof ImojeFastPaymentDataDTO) {
-            $payload = $data->toPayload([
-                'language' => $this->defaultLanguage
-            ]);
-        } else {
-            $payload = [
-                'customer' => [
-                    'firstName' => $data->getFirstName(),
-                    'lastName' => $data->getLastName(),
-                    'email' => $data->getEmail(),
-                    'locale' => $this->defaultLanguage,
-                ],
-                'amount' => $data->getAmount(),
-                'orderId' => $data->getInternalOrderId(),
-            ];
+        if (!$data instanceof ImojeFastPaymentDataDTO) {
+            throw new InvalidArgumentException('Argument should be instance of `ImojeFastPaymentDataDTO`');
         }
 
-        if($this->enforceWebhook) {
-            $payload['notificationUrl'] = $payload['notificationUrl'] ?? url($this->webhookUri);
-        }
-
-        if($this->successReturnUri) {
-            $payload['successReturnUrl'] = $payload['successReturnUrl'] ?? url($this->successReturnUri);
-        }
-
-        if($this->failureReturnUri) {
-            $payload['failureReturnUrl'] = $payload['failureReturnUrl'] ?? url($this->failureReturnUri);
-        }
-
-        $response = $this
-            ->buildDefaultRequest()
-            ->post(self::FAST_PAYMENT_URI, [
-                'serviceId' => $this->serviceId,
-                'currency' => $this->defaultCurrency,
-                ...$payload,
-            ]);
-
-        if(!$response->successful()) {
-            throw new BadProviderResponse($response);
-        }
+        $response = $this->processPayment($data);
 
         return new FastPaymentResultDTO(
             url: $response->json('payment.url'),
             providerData: $response->json(),
             internalOrderId: $response->json('payment.orderId'),
+            customerPaymentToken: $response->json('paymentProfile.id')
+        );
+    }
+
+    public function charge(
+        string $internalOrderId,
+        string $customerPaymentToken,
+        int $amount,
+        string $currency,
+        string $title = ''
+    ) {
+        $response = $this
+            ->buildDefaultRequest()
+            ->post(self::FAST_PAYMENT_URI, [
+                'serviceId' => $this->serviceId,
+                'paymentProfileId' => $customerPaymentToken,
+                'amount' => $amount,
+                'orderId' => $internalOrderId,
+                'title' => $title
+            ]);
+
+        return new FastPaymentResultDTO(
+            url: $response->json('payment.url'),
+            providerData: $response->json(),
+            internalOrderId: $response->json('payment.orderId'),
+            customerPaymentToken: $response->json('paymentProfile.id')
         );
     }
 
@@ -111,11 +103,43 @@ class ImojeProvider implements PaymentProvider, HasFastPayments
         return $this;
     }
 
+    protected function processPayment(ImojeFastPaymentDataDTO $data)
+    {
+        $payload = $data->toPayload([
+            'language' => $this->defaultLanguage
+        ]);
+
+        if ($this->enforceWebhook) {
+            $payload['notificationUrl'] = $payload['notificationUrl'] ?? url($this->webhookUri);
+        }
+
+        if ($this->successReturnUri) {
+            $payload['successReturnUrl'] = $payload['successReturnUrl'] ?? url($this->successReturnUri);
+        }
+
+        if ($this->failureReturnUri) {
+            $payload['failureReturnUrl'] = $payload['failureReturnUrl'] ?? url($this->failureReturnUri);
+        }
+
+        $response = $this
+            ->buildDefaultRequest()
+            ->post(self::FAST_PAYMENT_URI, [
+                'serviceId' => $this->serviceId,
+                'currency' => $this->defaultCurrency,
+                ...$payload,
+            ]);
+
+        if (!$response->successful()) {
+            throw new BadProviderResponse($response);
+        }
+
+        return $response;
+    }
+
     protected function buildDefaultRequest()
     {
         return Http::asJson()
             ->withToken($this->authToken, 'Bearer')
             ->baseUrl($this->baseUrl . '/' . $this->merchantId);
     }
-
 }
