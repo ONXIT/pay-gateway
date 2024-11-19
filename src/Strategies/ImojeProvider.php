@@ -9,6 +9,8 @@ use Qionar\PayGateway\DTOs\Contracts\RequiredDebitTransferData;
 use Qionar\PayGateway\DTOs\DeactivateProfileResultDTO;
 use Qionar\PayGateway\DTOs\DebitTransferResultDTO;
 use Qionar\PayGateway\Exceptions\BadProviderResponse;
+use Qionar\PayGateway\Strategies\Contracts\HasAllowedToDeactivateCustomerProfile;
+use Qionar\PayGateway\Strategies\Contracts\HasAllowedToDebitTransfer;
 use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
 use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
 use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
@@ -16,7 +18,7 @@ use Qionar\PayGateway\DTOs\ImojeFastPaymentDataDTO;
 use Qionar\PayGateway\DTOs\FastPaymentResultDTO;
 use Qionar\PayGateway\Strategies\Contracts\HasSubscriptions;
 
-class ImojeProvider implements PaymentProvider, HasFastPayments, HasSubscriptions
+class ImojeProvider implements PaymentProvider, HasFastPayments, HasSubscriptions, HasAllowedToDeactivateCustomerProfile, HasAllowedToDebitTransfer
 {
 
     public const FAST_PAYMENT_URI = '/payment';
