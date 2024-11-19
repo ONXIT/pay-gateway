@@ -4,6 +4,10 @@ namespace Qionar\PayGateway\Strategies;
 
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
+use Qionar\PayGateway\DTOs\Contracts\RequiredDeactivateProfileData;
+use Qionar\PayGateway\DTOs\Contracts\RequiredDebitTransferData;
+use Qionar\PayGateway\DTOs\DeactivateProfileResultDTO;
+use Qionar\PayGateway\DTOs\DebitTransferResultDTO;
 use Qionar\PayGateway\Exceptions\BadProviderResponse;
 use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
 use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
@@ -16,6 +20,8 @@ class ImojeProvider implements PaymentProvider, HasFastPayments, HasSubscription
 {
 
     public const FAST_PAYMENT_URI = '/payment';
+    public const DEBT_TRANSFER_URI = '/transaction/profile';
+    public const DEACTIVATE_CUSTOMER_PROFILE_URI = '/profile/deactivate';
 
     private string $baseUrl;
     private string $serviceId;
@@ -63,6 +69,45 @@ class ImojeProvider implements PaymentProvider, HasFastPayments, HasSubscription
             customerPaymentToken: $response->json('paymentProfile.id')
         );
     }
+
+    public function processDebitTransfer(RequiredDebitTransferData $data): DebitTransferResultDTO
+    {
+        $response = $this
+            ->buildDefaultRequest()
+            ->post(self::DEBT_TRANSFER_URI, [
+                'serviceId' => $this->serviceId,
+                'paymentProfileId' => $data->getPaymentProfileId(),
+                'amount' => $data->getAmount(),
+                'currency' => $this->defaultCurrency,
+                'orderId' => $data->getOrderId(),
+                'title' => $data->getTitle(),
+                'notificationUrl' => $this->webhookUri,
+            ]);
+
+        return new DebitTransferResultDTO(
+            transactionId: $response->json('transaction.id'),
+            paymentId: $response->json('transaction.payment.id'),
+            paymentStatus: $response->json('transaction.payment.status'),
+            cardStatusCode: $response->json('transaction.statusCode'),
+        );
+    }
+
+    public function processDeactivateCustomerProfile(RequiredDeactivateProfileData $data): DeactivateProfileResultDTO
+    {
+        //$data->getPaymentProfileId
+        $response = $this
+            ->buildDefaultRequest()
+            ->post(self::DEACTIVATE_CUSTOMER_PROFILE_URI, [
+                'paymentProfileId' => $data->getPaymentProfileId(),
+            ]);
+
+        return new DeactivateProfileResultDTO(
+            paymentId: $response->json('paymentProfile.id'),
+            isActive: $response->json('paymentProfile.isActive'),
+        );
+
+    }
+
 
     public function charge(
         string $internalOrderId,

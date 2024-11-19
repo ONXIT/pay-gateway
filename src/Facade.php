@@ -2,7 +2,11 @@
 
 namespace Qionar\PayGateway;
 
+use Qionar\PayGateway\DTOs\Contracts\RequiredDeactivateProfileData;
+use Qionar\PayGateway\DTOs\Contracts\RequiredDebitTransferData;
 use Qionar\PayGateway\DTOs\FastPaymentResultDTO;
+use Qionar\PayGateway\Strategies\Contracts\HasAllowedToDeactivateCustomerProfile;
+use Qionar\PayGateway\Strategies\Contracts\HasAllowedToDebitTransfer;
 use Qionar\PayGateway\Strategies\Contracts\HasFastPayments;
 use Qionar\PayGateway\Strategies\Contracts\PaymentProvider;
 use Qionar\PayGateway\DTOs\Contracts\RequiredPaymentData;
@@ -22,6 +26,24 @@ class Facade implements PaymentProvider, HasFastPayments
         }
 
         return $this->paymentProvider->processFastPayment($data);
+    }
+
+    public function processDebitTransfer(RequiredDebitTransferData $data) : array
+    {
+        if(!($this->paymentProvider instanceof HasAllowedToDebitTransfer)) {
+            throw new \Exception('Payment provider is not instance of HasAllowedToDebitTransfer');
+        }
+
+        return $this->paymentProvider->processDebitTransfer($data);
+    }
+
+    public function processDeactivateCustomerProfile(RequiredDeactivateProfileData $data) : array
+    {
+        if(!($this->paymentProvider instanceof HasAllowedToDeactivateCustomerProfile)) {
+            throw new \Exception('Payment provider is not instance of HasAllowedToDeactivateCustomerProfile');
+        }
+
+        return $this->paymentProvider->processDeactivateCustomerProfile($data);
     }
 
     public function getPaymentProvider(): PaymentProvider
