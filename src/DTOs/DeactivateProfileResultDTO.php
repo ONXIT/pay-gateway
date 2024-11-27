@@ -11,7 +11,7 @@ class DeactivateProfileResultDTO
     ) {}
 
 
-    public function getIsActive(): string
+    public function getIsActive(): bool
     {
         return $this->isActive;
     }
