@@ -83,7 +83,7 @@ class ImojeProvider implements PaymentProvider, HasFastPayments, HasSubscription
                 'currency' => $this->defaultCurrency,
                 'orderId' => $data->getOrderId(),
                 'title' => $data->getTitle(),
-                'notificationUrl' => $this->webhookUri,
+                'notificationUrl' => url($this->webhookUri),
             ]);
 
         return new DebitTransferResultDTO(
